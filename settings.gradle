@@ -1,0 +1,5 @@
+rootProject.name = 'msa-book-store-starter'
+
+include 'gateway'
+include 'catalog-service'
+include 'order-service'

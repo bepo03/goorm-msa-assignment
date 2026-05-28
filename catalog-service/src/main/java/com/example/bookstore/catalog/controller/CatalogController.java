@@ -1,0 +1,41 @@
+package com.example.bookstore.catalog.controller;
+
+import com.example.bookstore.catalog.model.BookResponse;
+import com.example.bookstore.catalog.service.CatalogService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/catalog/books")
+public class CatalogController {
+
+    private final CatalogService catalogService;
+
+    public CatalogController(CatalogService catalogService) {
+        this.catalogService = catalogService;
+    }
+
+    @GetMapping
+    public List<BookResponse> getBooks() {
+        return catalogService.findAll();
+    }
+
+    @GetMapping("/{bookId}")
+    public BookResponse getBook(@PathVariable Long bookId) {
+        return catalogService.findById(bookId);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Map<String, String> handleNotFound(IllegalArgumentException exception) {
+        return Map.of("message", exception.getMessage());
+    }
+}
