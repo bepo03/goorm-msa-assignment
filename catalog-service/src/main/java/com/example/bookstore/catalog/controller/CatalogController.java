@@ -1,7 +1,8 @@
 package com.example.bookstore.catalog.controller;
 
-import com.example.bookstore.catalog.model.BookResponse;
+import com.example.bookstore.catalog.dto.BookResponse;
 import com.example.bookstore.catalog.service.CatalogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +16,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/catalog/books")
+@RequiredArgsConstructor
 public class CatalogController {
 
     private final CatalogService catalogService;
-
-    public CatalogController(CatalogService catalogService) {
-        this.catalogService = catalogService;
-    }
 
     @GetMapping
     public List<BookResponse> getBooks() {
