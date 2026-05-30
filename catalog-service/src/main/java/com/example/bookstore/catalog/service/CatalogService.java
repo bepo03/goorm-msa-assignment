@@ -4,6 +4,7 @@ import com.example.bookstore.catalog.dto.BookResponse;
 import com.example.bookstore.catalog.dto.CreateBookRequest;
 import com.example.bookstore.catalog.dto.UpdateBookRequest;
 import com.example.bookstore.catalog.entity.Book;
+import com.example.bookstore.catalog.exception.BookNotFoundException;
 import com.example.bookstore.catalog.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CatalogService {
     @Transactional(readOnly = true)
     public BookResponse findById(Long bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. id=" + bookId));
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         return BookResponse.from(book);
     }
@@ -46,7 +47,7 @@ public class CatalogService {
     @Transactional
     public BookResponse update(Long bookId, UpdateBookRequest request) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. id=" + bookId));
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         book.update(request.title(), request.author(), request.price());
 
@@ -56,7 +57,7 @@ public class CatalogService {
     @Transactional
     public void delete(Long bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. id=" + bookId));
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         bookRepository.delete(book);
     }
