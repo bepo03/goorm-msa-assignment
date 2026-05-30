@@ -1,6 +1,7 @@
 package com.example.bookstore.catalog.service;
 
 import com.example.bookstore.catalog.dto.BookResponse;
+import com.example.bookstore.catalog.dto.CreateBookRequest;
 import com.example.bookstore.catalog.entity.Book;
 import com.example.bookstore.catalog.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,16 @@ public class CatalogService {
     public BookResponse findById(Long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. id=" + bookId));
+
+        return BookResponse.from(book);
+    }
+
+    public BookResponse create(CreateBookRequest request) {
+        Book book = bookRepository.save(Book.create(
+                request.title(),
+                request.author(),
+                request.price()
+        ));
 
         return BookResponse.from(book);
     }
