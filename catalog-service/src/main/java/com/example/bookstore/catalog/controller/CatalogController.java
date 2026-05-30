@@ -6,6 +6,7 @@ import com.example.bookstore.catalog.dto.UpdateBookRequest;
 import com.example.bookstore.catalog.service.CatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,12 @@ public class CatalogController {
     @PutMapping("/{bookId}")
     public BookResponse updateBook(@PathVariable Long bookId, @RequestBody UpdateBookRequest request) {
         return catalogService.update(bookId, request);
+    }
+
+    @DeleteMapping("/{bookId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable Long bookId) {
+        catalogService.delete(bookId);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

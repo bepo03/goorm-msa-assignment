@@ -52,4 +52,12 @@ public class CatalogService {
 
         return BookResponse.from(book);
     }
+
+    @Transactional
+    public void delete(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("책을 찾을 수 없습니다. id=" + bookId));
+
+        bookRepository.delete(book);
+    }
 }
