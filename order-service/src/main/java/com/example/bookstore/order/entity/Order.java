@@ -40,4 +40,17 @@ public class Order {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public static Order create(Long bookId, String bookTitle, int quantity, String customerName, BigDecimal totalPrice) {
+        Order order = new Order();
+        order.bookId = bookId;
+        order.bookTitle = bookTitle;
+        order.quantity = quantity;
+        order.customerName = customerName;
+        order.totalPrice = totalPrice;
+        order.status = OrderStatus.ORDERED;
+        order.createdAt = LocalDateTime.now();
+        order.updatedAt = LocalDateTime.now();
+        return order;
+    }
 }
