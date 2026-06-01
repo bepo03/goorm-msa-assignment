@@ -1,6 +1,7 @@
 package com.example.bookstore.order.model;
 
 import com.example.bookstore.order.entity.Order;
+import com.example.bookstore.order.entity.OrderStatus;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -12,7 +13,8 @@ public record OrderResponse(
         String bookTitle,
         int quantity,
         String customerName,
-        BigDecimal totalPrice
+        BigDecimal totalPrice,
+        OrderStatus status
 ) {
     public static OrderResponse from(Order order) {
         return OrderResponse.builder()
@@ -22,6 +24,7 @@ public record OrderResponse(
                 .quantity(order.getQuantity())
                 .customerName(order.getCustomerName())
                 .totalPrice(order.getTotalPrice())
+                .status(order.getStatus())
                 .build();
     }
 }

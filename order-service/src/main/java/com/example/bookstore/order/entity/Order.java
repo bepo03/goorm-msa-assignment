@@ -53,4 +53,9 @@ public class Order {
         order.updatedAt = LocalDateTime.now();
         return order;
     }
+
+    public void cancel() {
+        this.status = OrderStatus.CANCELED;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

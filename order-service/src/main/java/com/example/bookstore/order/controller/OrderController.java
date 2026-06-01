@@ -4,8 +4,11 @@ import com.example.bookstore.order.model.CreateOrderRequest;
 import com.example.bookstore.order.model.OrderResponse;
 import com.example.bookstore.order.service.OrderService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +19,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,5 +33,10 @@ public class OrderController {
     @GetMapping
     public List<OrderResponse> getOrders() {
         return orderService.findAll();
+    }
+
+    @PatchMapping("/{orderId}/cancel")
+    public OrderResponse cancelOrder(@PathVariable Long orderId) {
+        return orderService.cancelOrder(orderId);
     }
 }
