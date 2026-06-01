@@ -1,9 +1,8 @@
-package com.example.bookstore.catalog.model;
+package com.example.bookstore.catalog.dto;
 
 import java.math.BigDecimal;
 
-public record BookResponse(
-        Long id,
+public record UpdateBookRequest(
         String title,
         String author,
         BigDecimal price

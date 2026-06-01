@@ -1,28 +1,64 @@
 package com.example.bookstore.catalog.service;
 
-import com.example.bookstore.catalog.model.BookResponse;
+import com.example.bookstore.catalog.dto.BookResponse;
+import com.example.bookstore.catalog.dto.CreateBookRequest;
+import com.example.bookstore.catalog.dto.UpdateBookRequest;
+import com.example.bookstore.catalog.entity.Book;
+import com.example.bookstore.catalog.exception.BookNotFoundException;
+import com.example.bookstore.catalog.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CatalogService {
 
-    private final List<BookResponse> books = List.of(
-            new BookResponse(1L, "Spring Boot Start", "Alice", new BigDecimal("25000")),
-            new BookResponse(2L, "Gateway in Action", "Bob", new BigDecimal("32000")),
-            new BookResponse(3L, "MSA for Beginners", "Chris", new BigDecimal("28000"))
-    );
+    private final BookRepository bookRepository;
 
+    @Transactional(readOnly = true)
     public List<BookResponse> findAll() {
-        return books;
+        return bookRepository.findAll().stream()
+                .map(BookResponse::from)
+                .toList();
     }
 
+    @Transactional(readOnly = true)
     public BookResponse findById(Long bookId) {
-        return books.stream()
-                .filter(book -> book.id().equals(bookId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Book not found. id=" + bookId));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
+
+        return BookResponse.from(book);
+    }
+
+    @Transactional
+    public BookResponse create(CreateBookRequest request) {
+        Book book = bookRepository.save(Book.create(
+                request.title(),
+                request.author(),
+                request.price()
+        ));
+
+        return BookResponse.from(book);
+    }
+
+    @Transactional
+    public BookResponse update(Long bookId, UpdateBookRequest request) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
+
+        book.update(request.title(), request.author(), request.price());
+
+        return BookResponse.from(book);
+    }
+
+    @Transactional
+    public void delete(Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
+
+        bookRepository.delete(book);
     }
 }
