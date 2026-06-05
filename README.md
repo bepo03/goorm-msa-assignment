@@ -322,6 +322,28 @@ public class BookOrder {
 - Catalog Service: `8081`
 - Order Service: `8082`
 
+### Docker Compose 실행
+
+Docker Desktop을 실행하고, `8000`, `8081`, `8082` 포트를 사용하는 로컬 프로세스가 없는지 확인한다.
+
+프로젝트 루트에서 이미지를 빌드하고 모든 서비스를 실행한다.
+
+```bash
+docker compose up --build
+```
+
+실행 후 Gateway를 통해 API를 호출한다.
+
+```bash
+curl http://localhost:8000/api/catalog/books
+```
+
+실행 중인 터미널에서 `Ctrl+C`를 누른 뒤 컨테이너와 네트워크를 정리한다.
+
+```bash
+docker compose down
+```
+
 ## 호출 예시
 
 책 목록 조회:
@@ -361,6 +383,5 @@ curl http://localhost:8000/api/orders
 - Service Discovery(Eureka) 추가
 - Config Server 추가
 - 공통 라이브러리 모듈 분리
-- Docker Compose 구성
 - DB 연동 및 JPA 추가
 - Resilience4j, Circuit Breaker 추가
