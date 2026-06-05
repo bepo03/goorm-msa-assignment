@@ -35,6 +35,11 @@ public class OrderController {
         return orderService.findAll();
     }
 
+    @GetMapping("/{orderId}")
+    public OrderResponse getOrder(@PathVariable Long orderId) {
+        return orderService.findById(orderId);
+    }
+
     @PatchMapping("/{orderId}/cancel")
     public OrderResponse cancelOrder(@PathVariable Long orderId) {
         return orderService.cancelOrder(orderId);
