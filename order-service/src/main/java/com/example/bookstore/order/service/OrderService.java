@@ -44,6 +44,13 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public OrderResponse findById(Long orderId) {
+        return orderRepository.findById(orderId)
+                .map(OrderResponse::from)
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
+    }
+
     @Transactional
     public OrderResponse cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
